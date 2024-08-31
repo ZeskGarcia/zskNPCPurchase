@@ -11,6 +11,33 @@ else
   FName = "standalone"
 end
 
+function OpenMenu()
+  if (FName == "standalone") then
+    -- add here your function
+    return
+  end
+
+  if (FName == "ESX") then
+    local elements = {}
+    if (Shared and Shared.Weapons) then
+      for k,v in pairs(Shared.Weapons) do
+        if (v.enabled) then
+          table.insert(elements, { label = ("%s - %s$"):format(v.name, v.price), value = k, price = v.price })
+        end
+      end
+    end
+    ESX.UI.Menu.Open('default', GetCurrentResourceName(), "WeaponPurchaseMenu",
+      {
+        title = "Compra de Armas",
+        align = "bottom-right",
+        elements = elements
+      }, function(menu, data)
+      end, function(menu, data)
+        menu.close()
+      end)
+  end
+end
+
 CreateThread(function()
     local _sleep = true
     
@@ -21,7 +48,7 @@ CreateThread(function()
       _sleep = not (_dist < 7.5)
       if (not _sleep) then
         if (IsControlJustPressed(0, 38)) then
-          
+          OpenMenu()
         end
       end
       Wait((_sleep) and 750 or 0)
